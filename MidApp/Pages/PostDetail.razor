@@ -1,0 +1,28 @@
+﻿@page "/postdetail/{PostId}"
+@using MidApp.Data;
+@inject DataStore dataStore
+@inject NavigationManager NavigationManager
+
+<h3>Post Detail</h3>
+@if (currentPost != null)
+{
+    <textarea @bind="currentPost.Content"></textarea>
+    <button @onclick="SaveChanges">Save Changes</button>
+}
+
+@code {
+    [Parameter]
+    public string PostId { get; set; }
+
+    private Post currentPost;
+
+    protected override void OnInitialized()
+    {
+        currentPost = dataStore.Posts.FirstOrDefault(p => p.Id == int.Parse(PostId));
+    }
+
+    private void SaveChanges()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

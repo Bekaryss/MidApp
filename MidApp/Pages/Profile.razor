@@ -1,0 +1,25 @@
+﻿@page "/profile"
+@using MidApp.Data;
+@inject DataStore dataStore
+
+
+<h3>Profile</h3>
+<label>Name:</label>
+<input @bind="dataStore.UserProfile.Name" />
+<button @onclick="SaveProfile">Save Profile</button>
+<br/>
+
+@if (saveConfirmation)
+{
+    <p>Profile saved successfully!</p>
+}
+
+@code {
+    private bool saveConfirmation = false;
+
+    private void SaveProfile()
+    {
+        saveConfirmation = true;
+    }
+}
+

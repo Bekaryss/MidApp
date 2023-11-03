@@ -1,0 +1,51 @@
+﻿@page "/"
+@using MidApp.Data;
+@inject DataStore dataStore
+
+<h3>Feed</h3>
+
+<div class="feed-container">
+    @foreach (var post in dataStore.Posts)
+    {
+        <div class="post">
+            <div class="post-content">
+                <span class="author">@post.AuthorName</span>
+                <p>@post.Content</p>
+            </div>
+            <div>
+                <button @onclick="() => LikePost(post)">Like (@post.Likes)</button>
+                <button @onclick="() => DislikePost(post)">Dislike (@post.Dislikes)</button>
+                <NavLink href="@($"/postdetail/{post.Id}")">Details</NavLink>
+                <button @onclick="() => DeletePost(post)">Delete</button>
+            </div>
+        </div>
+    }
+
+    <br />
+    <div class="post-input">
+        <textarea placeholder="What's happening?" @bind="newPostContent"></textarea>
+        <button @onclick="AddPost">Tweet</button>
+    </div>
+</div>
+
+
+@code {
+    private string newPostContent;
+
+    private void AddPost()
+    {
+        dataStore.Posts.Add(new Post
+            {
+                Id = dataStore.Posts.Count + 1,
+                AuthorName = dataStore.UserProfile.Name,
+                Content = newPostContent
+            });
+        newPostContent = string.Empty;
+    }
+
+    private void LikePost(Post post) => post.Likes++;
+
+    private void DislikePost(Post post) => post.Dislikes--;
+
+    private void DeletePost(Post post) => dataStore.Posts.Remove(post);
+}
